@@ -1,5 +1,5 @@
 ### BASE STAGE ###
-FROM python:3.8.18-slim-bullseye AS base-stage
+FROM python:3.9.19-slim-bullseye AS base-stage
 # Keeps Python from generating .pyc files in the container
 # ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
@@ -23,7 +23,8 @@ USER appuser
 WORKDIR /home/appuser
 RUN --mount=type=cache,target=/home/appuser/.cache/pip,uid=1000,gid=1000 python3 -m pip install --upgrade pip
 RUN --mount=type=cache,target=/home/appuser/.cache/pip,uid=1000,gid=1000 python3 -m pip install Cython==3.0.10
-COPY requirements.txt .
+COPY requirements.txt requirements_deps.txt ./
+RUN --mount=type=cache,target=/home/appuser/.cache/pip,uid=1000,gid=1000 python3 -m pip install -r requirements_deps.txt
 RUN --mount=type=cache,target=/home/appuser/.cache/pip,uid=1000,gid=1000 python3 -m pip install -r requirements.txt
 
 
